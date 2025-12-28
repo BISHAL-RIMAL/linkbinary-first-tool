@@ -1,5 +1,27 @@
 import { useState } from "react";
 
+function GuestEntry({visit, index, like, Toggle, remove}) {
+  return(
+    <li key={index}>
+            <div
+            style= {{
+              display: 'inline-block',
+              border: visit.name.toLowerCase() === "admin" && '2px solid black',
+              padding: '5px'
+            }}>
+            <p>Name: {visit.name}</p></div> 
+            <p>Message: {visit.private ? 
+            (<button onClick={() => Toggle(index)}>
+            {visit.visible ? 'Hide Private Message' : 'View Private Message'}
+            </button>) : visit.message}
+            {visit.visible && visit.private && <p>{visit.message}</p>}
+            </p>
+            <p>Likes: {visit.likes}</p>
+            <button onClick={() => like(index)}>Like</button>
+            <button onClick={() => remove(index)}>Remove</button>
+          </li>
+  );
+}
 function App(){
   //initialize array
   const [visitor, setVisitor] = useState([]);
@@ -54,24 +76,14 @@ function App(){
       (<p>Visitor Entry Is Empty !</p>):
       (<ul>
         {visitor.map((visit, index) =>(
-          <li key={index}>
-            <div
-            style= {{
-              display: 'inline-block',
-              border: visit.name.toLowerCase() === "admin" && '2px solid black',
-              padding: '5px'
-            }}>
-            <p>Name: {visit.name}</p></div> 
-            <p>Message: {visit.private ? 
-            (<button onClick={() => toggle(index)}>
-            {visit.visible ? 'Hide Private Message' : 'View Private Message'}
-            </button>) : visit.message}
-            {visit.visible && visit.private && <p>{visit.message}</p>}
-            </p>
-            <p>Likes: {visit.likes}</p>
-            <button onClick={() => Like(index)}>Like</button>
-            <button onClick={() => Remove(index)}>Remove</button>
-          </li>
+          <GuestEntry
+            key={index}
+            index={index}
+            visit={visit}
+            like={Like}
+            Toggle={toggle}
+            remove={Remove}
+          />
         ))}
       </ul>)}
     </div>
