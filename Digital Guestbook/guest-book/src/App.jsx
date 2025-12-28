@@ -1,35 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+function App(){
+  //initialize array
+  const [visitor, setVisitor] = useState([]);
+  const [v_name, setName] = useState("");
+  const [Message, setMessage] = useState("");
+  const [Private, setPrivate] = useState(false);
+
+  const addVisitor =() => {
+    if (v_name.trim() ==="") return;
+    setVisitor([...visitor, {name:v_name, message:Message,
+      private: Private, likes: 0, visible:false }]);
+    setName(""); setMessage("");
+    setPrivate(false);
+  };
+
+  const Like = (index) => {
+    const newList = [...visitor];
+    newList[index].likes +=1;
+    setVisitor(newList);
+  };
+
+  const toggle = (index) =>{
+    const newList = [...visitor];
+    newList[index].visible = !newList[index].visible;
+    setVisitor(newList);
+  }
+
+  const Remove = (v_id) => {
+    setVisitor(visitor.filter((_, index) => index !== v_id));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h1>Digital Guestbook</h1>
+      <input
+        type="text" value={v_name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Enter Visitor Name"/><br/>
+      <input
+        type="text" value={Message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Enter Message"/><br/>
+      <label>
+        <input
+          type="checkbox" checked={Private}
+          onChange={(e) => setPrivate(e.target.checked)}>
+        </input>Mark For Private<br/>
+      </label>
+      <button onClick={addVisitor}>Add Visitor</button>
 
-export default App
+      {visitor.length ===0 ?
+      (<p>Visitor Entry Is Empty !</p>):
+      (<ul>
+        {visitor.map((visit, index) =>(
+          <li key={index}>
+            <div
+            style= {{
+              display: 'inline-block',
+              border: visit.name.toLowerCase() === "admin" && '2px solid black',
+              padding: '5px'
+            }}>
+            <p>Name: {visit.name}</p></div> 
+            <p>Message: {visit.private ? 
+            (<button onClick={() => toggle(index)}>
+            {visit.visible ? 'Hide Private Message' : 'View Private Message'}
+            </button>) : visit.message}
+            {visit.visible && visit.private && <p>{visit.message}</p>}
+            </p>
+            <p>Likes: {visit.likes}</p>
+            <button onClick={() => Like(index)}>Like</button>
+            <button onClick={() => Remove(index)}>Remove</button>
+          </li>
+        ))}
+      </ul>)}
+    </div>
+  );
+}
+export default App;
