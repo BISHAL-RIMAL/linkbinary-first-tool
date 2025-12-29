@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function GuestEntry({visit, index, like, Toggle, remove}) {
+function GuestEntry({visit, index, like, toggle, remove}) {
   return(
     <li key={index}>
             <div
@@ -11,7 +11,7 @@ function GuestEntry({visit, index, like, Toggle, remove}) {
             }}>
             <p>Name: {visit.name}</p>
             <p>Message: {visit.private ? 
-            (<button onClick={() => Toggle(index)}>
+            (<button onClick={() => toggle(index)}>
             {visit.visible ? 'Hide Private Message' : 'View Private Message'}
             </button>) : visit.message}
             {visit.visible && visit.private && <p>{visit.message}</p>}
@@ -49,7 +49,7 @@ function App(){
     setVisitor(newList);
   };
 
-  const toggle = (index) =>{
+  const Toggle = (index) =>{
     const newList = [...visitor];
     newList[index].visible = !newList[index].visible;
     setVisitor(newList);
@@ -114,13 +114,13 @@ function App(){
       {visitor.length ===0 ?
       (<p>Visitor Entry Is Empty !</p>):
       (<ul>
-        {visitor.map((visit, index) =>(
+        {keyword.map((visit, index) =>(
           <GuestEntry
             key={index}
             index={index}
             visit={visit}
             like={Like}
-            Toggle={toggle}
+            toggle={Toggle}
             remove={Remove}
           />
         ))}
