@@ -1,27 +1,31 @@
 import { useState, useEffect } from "react";
+import "./App.css";
 
 function GuestEntry({visit, index, like, toggle, remove}) {
   return(
     <li key={index}>
-            <div
-            style= {{
-              display: 'inline-block',
-              border: visit.name.toLowerCase() === "admin" && '2px solid black',
-              padding: '5px'
-            }}>
-            <p>Name: {visit.name}</p>
-            <p>Message: {visit.private ? 
-            (<button onClick={() => toggle(index)}>
-            {visit.visible ? 'Hide Private Message' : 'View Private Message'}
-            </button>) : visit.message}
-            {visit.visible && visit.private && <p>{visit.message}</p>}
-            </p>
-            <p>Likes: {visit.likes}</p>
-            <button onClick={() => like(index)}>Like</button>
-            <button onClick={() => remove(index)}>Remove</button>
-              <p>{visit.timestamp}</p>
-          </div>
-          </li>
+      <div>
+        <p
+          style= {{
+            display: 'inline',
+            border: visit.name.toLowerCase() === "admin" && '2px solid black',
+            padding: '5px'
+          }}
+          >Name: {visit.name}</p>
+          <p>Message:
+          {visit.private ? 
+          (<button className='toggle'
+          onClick={() => toggle(index)}>
+          {visit.visible ? 'Hide Private Message' : 'View Private Message'}
+          </button>) : visit.message}
+          {visit.visible && visit.private && <p>{visit.message}</p>}
+          </p>
+          <p>Likes: {visit.likes}</p>
+          <button className="like" onClick={() => like(index)}>Like</button>
+          <button className="remove" onClick={() => remove(index)}>Remove</button>
+        <p>{visit.timestamp}</p>
+      </div>
+    </li>
   );
 }
 
@@ -65,12 +69,12 @@ function App(){
   }, [visitor]);
   //save
   function saveEntries(entries){
-    localStorage.setItem("visitorEntries", JSON.stringify(entries));
+    localStorage.setItem("visitor", JSON.stringify(entries));
   }
   
   //load entries from local storage
   function loadEntries() {
-    const savedEntries = localStorage.getItem("visitorEntries");
+    const savedEntries = localStorage.getItem("visitor");
     return savedEntries ? JSON.parse(savedEntries): [];
   }
 
@@ -113,7 +117,7 @@ function App(){
 
       {visitor.length ===0 ?
       (<p>Visitor Entry Is Empty !</p>):
-      (<ul>
+      (<ul className="display">
         {keyword.map((visit, index) =>(
           <GuestEntry
             key={index}
