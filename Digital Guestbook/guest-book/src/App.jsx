@@ -113,7 +113,7 @@ function App(){
           onChange={(e) => setPrivate(e.target.checked)}>
         </input>Mark For Private<br/>
       </label>
-      <button onClick={addVisitor}>Add Visitor</button>
+      <button className="add" onClick={addVisitor}>Add Visitor</button>
 
       {visitor.length ===0 ?
       (<p>Visitor Entry Is Empty !</p>):
